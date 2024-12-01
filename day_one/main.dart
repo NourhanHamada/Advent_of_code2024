@@ -24,4 +24,16 @@ void main() async {
   }
 
   print(totalDistance);
+
+  // Part Two
+
+  var totalScore = 0;
+  for (int i = 0; i < leftList.length; i++) {
+    var repeatCount = rightList.where((item) => item == leftList[i]).length;
+    var currentItemScore = repeatCount * leftList[i];
+
+    totalScore += currentItemScore;
+  }
+
+  print(totalScore);
 }
