@@ -12,28 +12,40 @@ void main() async {
 
   int safeCount = 0;
 
-  for (var line in newLines) {
-    bool isSafe = true;
-
-    // Check for differences and if they follow the rules
+  bool isSafe(List<int> line) {
     for (int i = 0; i < line.length - 1; i++) {
       int difference = line[i + 1] - line[i];
 
       // Check the difference between numbers is min 1 & max 3.
       if (difference.abs() < 1 || difference.abs() > 3) {
-        isSafe = false;
-        break;
+        return false;
       }
 
       // Check if all numbers are increasing or decreasing
       if (i > 0 && (difference > 0) != (line[i] - line[i - 1] > 0)) {
-        isSafe = false;
-        break;
+        return false;
       }
     }
+    return true;
+  }
 
-    if (isSafe) {
+  for (var line in newLines) {
+    if (isSafe(line)) {
       safeCount++;
+    } else {
+      // Try removing one element at a time
+      bool foundSafe = false;
+      for (int i = 0; i < line.length; i++) {
+        List<int> modifiedLine = List.from(line)..removeAt(i);
+
+        if (isSafe(modifiedLine)) {
+          foundSafe = true;
+          break;
+        }
+      }
+      if (foundSafe) {
+        safeCount++;
+      }
     }
   }
 
